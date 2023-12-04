@@ -11,9 +11,13 @@ import base64
 import datetime
 import email.utils
 import json
+import urllib3
 
 import requests
 
+from urllib.parse import urlparse
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+# Handle ssl errors and warnings
 
 class Client:
     def __init__(self, akey=None, pkey=None, host=None, code=None, response=None, keyfile=None):
@@ -118,7 +122,7 @@ class Client:
                 "hsm_status": "true", "pkpush": "rsa-sha512"}
 
         signature = self.generate_signature("GET", path, time, data)
-        r = requests.get(f"https://{self.host}{path}", params=data, headers={
+        r = requests.get(f"https://{self.host}{path}", params=data, verify=False, headers={
                          "Authorization": signature, "x-duo-date": time, "host": self.host})
 
         return r.json()
@@ -135,7 +139,7 @@ class Client:
         # data["push_received"] = True
         # data["pull_to_refresh_used"] = True
         signature = self.generate_signature("POST", path, time, data)
-        r = requests.post(f"https://{self.host}{path}", data=data, headers={
+        r = requests.post(f"https://{self.host}{path}", data=data, verify=False, headers={
                           "Authorization": signature, "x-duo-date": time, "host": self.host, "txId": transactionid})
 
         return r.json()
@@ -152,7 +156,7 @@ class Client:
         # data["push_received"] = True
         # data["pull_to_refresh_used"] = True
         signature = self.generate_signature("POST", path, time, data)
-        r = requests.post(f"https://{self.host}{path}", data=data, headers={
+        r = requests.post(f"https://{self.host}{path}", data=data, verify=False, headers={
                           "Authorization": signature, "x-duo-date": time, "host": self.host})
     def device_info(self):
         dt = datetime.datetime.utcnow()
@@ -162,7 +166,7 @@ class Client:
                 "hsm_status": "true", "pkpush": "rsa-sha512"}
 
         signature = self.generate_signature("GET", path, time, data)
-        r = requests.get(f"https://{self.host}{path}", params=data, headers={
+        r = requests.get(f"https://{self.host}{path}", params=data, verify=False, headers={
                          "Authorization": signature, "x-duo-date": time, "host": self.host})
         return r.json()
 
