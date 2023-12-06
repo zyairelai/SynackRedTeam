@@ -219,6 +219,7 @@ def main():
                 print(tx)
                 c.reply_transaction(tx["urgid"], 'approve')
                 time.sleep(2)
+                exit()
         else:
             print("No transactions")
 
