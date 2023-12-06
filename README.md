@@ -17,3 +17,6 @@ Approve Duo Push requests without a phone.
 3. Wait
 4. ....
 5. Profit
+
+# Known issue
+The device order must have the automation of this script as primary.  If you don't have it as such request it to be made primary or make it primary by removing previous devices, and re-add them later
