@@ -1,4 +1,4 @@
-# ruo
+# Synack DUO automation based on ruo
 Approve Duo Push requests without a phone.
 
 # Requirements
