@@ -1,24 +1,52 @@
-# Synack DUO automation based on ruo
-Approve Duo Push requests without a phone and save the token required for further automation.
+# Synack DUO Automation Guide
 
-# Requirements
-1. Python
-2. PyCryptoDome
+Automate Synack DUO Push requests without needing a physical device and save the required token for further automation processes.
 
-`pip install pycryptodome`
+## Prerequisites
+- Python3
+- Libraries: pycryptodome, requests, beautifulsoup4
 
-3. Requests 
+Install the necessary libraries:
+```bash
+pip install -r requirements.txt
+```
 
-`pip install requests`
+## Setting up ruo
+1. Execute `main.py`.
+2. Enter the code from the QR code (use an alternative QR code scanner) or via the link provided in the email (accessible on a desktop).
 
-# Usage
-1. Run main.py
-2. Insert code from the qr code (using another qrcode scanner) or by clicking on the link in the email (on your desktop)
-3. Wait
-4. ....
-5. Profit
-6. Modify synaconnect.py with your credentials in lines 11,12.
-7. Modify line 37 setting options.headless = True , if you don't want to see the browser.
+## Using synconnect (Selenium-based token generation)
+### Preparation
+1. Complete the ruo setup.
+2. In `synconnect.py`, update your credentials at lines 11 and 12.
+3. To run in headless mode (without opening a browser window), set `options.headless = True` on line 37.
+4. (Optional) Customize Token Storage Location
+   - To save the token in a different location, modify the `file_path` on line 15.
+   - By default, the token is stored in `/tmp/synacktoken`.
 
-# Known issue
-The device order must have the automation of this script as primary.  If you don't have it as such request it to be made primary or make it primary by removing previous devices, and re-add them later
+### Running the Script
+Execute the script using Python:
+```bash
+python3 synconnect.py
+```
+
+## Using synconnect_cli (Requests-based token generation)
+### Initial Setup
+1. After setting up ruo, capture the login process with Burp Suite.
+2. Locate the `/frame/v4/auth/prompt/data` request and note down the index and key from its response.
+3. Update `synconnect_cli.py` with your credentials on lines 11 and 12.
+4. Set the `index` (e.g., `phone2`) on line 16 and `key` (e.g., `DPXXXXXXXXXX`) on line 17.
+5. (Optional) Customize Token Storage Location
+   - To save the token in a different location, modify the `file_path` on line 18.
+   - By default, the token is stored in `/tmp/synacktoken`.
+
+### Running the Script
+Execute using Python:
+```bash
+python3 synconnect_cli.py
+```
+
+## Known Issue and Solution
+For the automation to work correctly, the device set up for this script must be the primary device. If it's not, request to make it primary or do so manually by removing previous devices and re-adding them later.
+
+Alternatively, use `synconnect_cli.py` with the correct configuration to circumvent this issue.
