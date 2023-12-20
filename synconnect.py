@@ -44,12 +44,14 @@ try:
     # Step 2: Perform the login
     driver.get('https://login.synack.com/')
     driver.find_element(By.NAME, 'email').send_keys(username)
-    driver.find_element(By.NAME, 'password').send_keys(password)
-    driver.implicitly_wait(10)
+    driver.find_element(By.NAME, 'password').send_keys(password
+    driver.implicitly_wait(20)
     driver.find_element(By.CLASS_NAME, 'btn-blue').click()
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(15)
     driver.find_element(By.CLASS_NAME, 'btn-blue').click()
-    
+    driver.implicitly_wait(15)
+    driver.find_element(By.CLASS_NAME, 'button--xlarge').click()
+
     # DUO logic
     subprocess.run(["python3","main.py"], check=True)
     # DUO logic end
