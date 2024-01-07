@@ -5,6 +5,7 @@ from selenium.webdriver.common.proxy import Proxy, ProxyType
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 
 
 # Replace with your login credentials
@@ -34,7 +35,7 @@ else:
     options = webdriver.FirefoxOptions()
 
 
-options.headless = False  # Set to True if you don't want to see the browser
+options.headless = True  # Set to True if you don't want to see the browser
 driver = webdriver.Firefox(options=options)
 
 try:
@@ -44,14 +45,24 @@ try:
     # Step 2: Perform the login
     driver.get('https://login.synack.com/')
     driver.find_element(By.NAME, 'email').send_keys(username)
-    driver.find_element(By.NAME, 'password').send_keys(password
+    driver.find_element(By.NAME, 'password').send_keys(password)
     driver.implicitly_wait(20)
     driver.find_element(By.CLASS_NAME, 'btn-blue').click()
-    driver.implicitly_wait(15)
+    driver.implicitly_wait(25)
     driver.find_element(By.CLASS_NAME, 'btn-blue').click()
-    driver.implicitly_wait(15)
-    driver.find_element(By.CLASS_NAME, 'button--xlarge').click()
-
+    try:
+        driver.implicitly_wait(25)
+        element = WebDriverWait(driver, 25).until(
+            EC.presence_of_element_located((By.CLASS_NAME, 'button--xlarge'))
+        )
+        element.click()
+    except NoSuchElementException as e:
+        print(f"Element not found: {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        pass
+    
     # DUO logic
     subprocess.run(["python3","main.py"], check=True)
     # DUO logic end
