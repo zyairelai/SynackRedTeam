@@ -34,7 +34,6 @@ else:
     # If no proxy is required, set up Firefox options without proxy settings
     options = webdriver.FirefoxOptions()
 
-
 options.headless = True  # Set to True if you don't want to see the browser
 driver = webdriver.Firefox(options=options)
 
@@ -47,12 +46,18 @@ try:
     driver.find_element(By.NAME, 'email').send_keys(username)
     driver.find_element(By.NAME, 'password').send_keys(password)
     driver.implicitly_wait(20)
-    driver.find_element(By.CLASS_NAME, 'btn-blue').click()
-    driver.implicitly_wait(25)
-    driver.find_element(By.CLASS_NAME, 'btn-blue').click()
+    while True:
+        try:
+            button = driver.find_element(By.CLASS_NAME, 'btn-blue')
+            button.click()
+            driver.implicitly_wait(10)
+        except NoSuchElementException:
+        # Button not found, break out of the loop
+            break
+
     try:
-        driver.implicitly_wait(25)
-        element = WebDriverWait(driver, 25).until(
+        driver.implicitly_wait(5)
+        element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CLASS_NAME, 'button--xlarge'))
         )
         element.click()
@@ -67,7 +72,6 @@ try:
     subprocess.run(["python3","main.py"], check=True)
     # DUO logic end
     WebDriverWait(driver, 50).until(EC.title_contains("Platform"))
-
 
     key_to_retrieve = "shared-session-com.synack.accessToken"
     stored_value = driver.execute_script(f"return sessionStorage.getItem('{key_to_retrieve}');")
