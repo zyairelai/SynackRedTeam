@@ -1,6 +1,7 @@
 import requests
 import time
 import urllib3
+import subprocess
 
 # Suppress only the single InsecureRequestWarning from urllib3 needed for `verify=False`.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -67,8 +68,9 @@ def main():
                         print("Attempting to claim mission again in 5 seconds.")
                         time.sleep(5)  # Wait for 5 seconds before trying to claim the task again
                 if status_code == 401:
-                    print("Unauthorized please refresh your token")
-                    exit()  # If we hit 401 we exit the token needs to be refreshed
+                    subprocess.run(["python3", "synconnect_cli.py"])
+                    token = read_token_from_file(token_file_path)
+                    print("Token refreshed, continuing the loop.")  # If we hit 401 we exit the token needs to be refreshed
         time.sleep(30)  # Wait for 30 seconds before polling again
 
 if __name__ == "__main__":
