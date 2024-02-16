@@ -50,3 +50,14 @@ python3 synconnect_cli.py
 For the automation to work correctly, the device set up for this script must be the primary device. If it's not, request to make it primary or do so manually by removing previous devices and re-adding them later.
 
 Alternatively, use `synconnect_cli.py` with the correct configuration to circumvent this issue.
+
+### Mission Bot
+Execute using Python:
+```bash
+python3 mission.py
+```
+If you want to use it standalone as a script and provide your own token, comment out the following lines.  Token is always read from /tmp/synacktoken.
+```
+ 70                   subprocess.run(["python3", "synconnect_cli.py"])
+ 71                   token = read_token_from_file(token_file_path)
+```
